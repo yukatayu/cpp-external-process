@@ -17,11 +17,12 @@ namespace ExtProc{
 		Process() = delete;
 		Process(std::string command);
 
-		void        run(RunMode_Detach, bool with_stdout = false);
+		void        run(RunMode_Detach);
 		return_type run(RunMode_Await, RunOption_WithStdOut);
 		int         run(RunMode_Await);
 
 	private:
+		void run_impl(bool with_stdout = false);
 		enum class Phase{
 			initialized,
 			launched,
