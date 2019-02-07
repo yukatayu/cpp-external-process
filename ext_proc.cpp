@@ -6,17 +6,12 @@ namespace ExtProc{
 			, phase_ (Phase::initialized)
 		{ }
 
-	void Process::run(RunMode_Detach, bool with_stdout){
-		if(phase_ != Phase::initialized)
-			throw std::runtime_error("process has been already launched: " + command_);
-		std::promise<return_type> p;
-		return_data_ = p.get_future();
-		std::thread th(&proc, std::move(p), command_, with_stdout);
-		th.detach();
+	void Process::run(RunMode_Detach){
+		run_impl(false);
 	}
 
 	Process::return_type Process::run(RunMode_Await, RunOption_WithStdOut){
-		run(detach, true);
+		run_impl(true);
 		auto ret = return_data_.get();
 		phase_ = Phase::finished;
 		return ret;
@@ -24,7 +19,7 @@ namespace ExtProc{
 
 	int Process::run(RunMode_Await){
 		int ret = 0;
-		run(detach, false);
+		run_impl(false);
 		std::tie(ret, std::ignore) = return_data_.get();
 		phase_ = Phase::finished;
 		return ret;
@@ -48,5 +43,14 @@ namespace ExtProc{
 				ret.set_exception(std::current_exception());
 			} catch(...) { }
 		}
+	}
+
+	void Process::run_impl(bool with_stdout){
+		if(phase_ != Phase::initialized)
+			throw std::runtime_error("process has been already launched: " + command_);
+		std::promise<return_type> p;
+		return_data_ = p.get_future();
+		std::thread th(&proc, std::move(p), command_, with_stdout);
+		th.detach();
 	}
 }
