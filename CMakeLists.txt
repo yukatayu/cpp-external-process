@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.6)
 project(cpp_external_processes CXX)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 add_library(external_processes ext_proc.cpp)
 
 find_package (Threads)
