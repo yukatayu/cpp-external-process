@@ -10,7 +10,7 @@ int main(){
 	// -+-+-+-+- //
 
 	Process proc1(command);
-	proc.run(await, with_stdout);
+	proc1.run(detach);
 
 	// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- //
 	//  await (status code + stdout)   //
@@ -18,13 +18,17 @@ int main(){
 
 	Process proc2(command);
 	std::tuple<int, std::string> res
-		= proc.run(await, with_stdout);
+		= proc2.run(await, with_stdout);
 
 	// -+-+-+-+-+-+-+-+-+-+- //
 	//  await (status code)  //
 	// -+-+-+-+-+-+-+-+-+-+- //
 
 	Process proc3(command);
-	int ret = proc.run(await, with_stdout);
+	int ret = proc3.run(await);
 	
+	// -+-+-+- //
+	//  Join   //
+	// -+-+-+- //
+	proc1.join();
 }
