@@ -3,7 +3,7 @@
 
 int main(){
 	using namespace ExtProc;
-	std::string command = R"(/bin/bash -c "echo "start" && sleep 2 && echo finished && exit 4")";
+	std::string command = R"(/bin/bash -c "echo "start" && sleep 1 && echo finished && exit 4")";
 
 	// -+-+-+-+- //
 	//  detach   //
