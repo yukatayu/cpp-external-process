@@ -21,11 +21,13 @@ namespace ExtProc{
 		return_type run(RunMode_Await, RunOption_WithStdOut);
 		int         run(RunMode_Await);
 
+		int join();
+
 	private:
 		void run_impl(bool with_stdout = false);
 		enum class Phase{
 			initialized,
-			launched,
+			joinable,
 			finished
 		};
 		static void proc(std::promise<return_type> ret, std::string command, bool get_stdout);

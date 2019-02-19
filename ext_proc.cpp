@@ -6,8 +6,18 @@ namespace ExtProc{
 			, phase_ (Phase::initialized)
 		{ }
 
+	int Process::join(){
+		if(phase_ != Phase::joinable)
+			throw std::runtime_error("process is not joinable");
+		int ret = 0;
+		std::tie(ret, std::ignore) = return_data_.get();
+		phase_ = Phase::finished;
+		return ret;
+	}
+
 	void Process::run(RunMode_Detach){
 		run_impl(false);
+		phase_ = Phase::joinable;
 	}
 
 	Process::return_type Process::run(RunMode_Await, RunOption_WithStdOut){
